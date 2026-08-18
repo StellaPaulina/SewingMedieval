@@ -50,7 +50,9 @@ bag_layout <- function(pattern, fabric_width){
     layout_result <- list(
         fabric = list(
             width = fabric_width,
-            length = minimum_fabric
+            length = minimum_fabric,
+            fold_x = 0,
+            fold_y = 0
         ),
         placements = list(
             list(
