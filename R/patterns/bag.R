@@ -24,9 +24,17 @@ generate_bag <- function(measurements, options = list()) {
     )
   ))
 
+  new_pattern_piece <- function(id, geometry) {
+      list(id = id, geometry = geometry)
+  }
+  
   piece <- new_pattern_piece(
     id = "full",
     geometry = geometry
+  )
+
+  new_pattern <- function(id, units, pieces)(
+    list(id = id, units = units, pieces = pieces)
   )
 
   new_pattern(
