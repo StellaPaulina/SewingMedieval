@@ -45,12 +45,12 @@ generate_circleskirt <- function(measurements, options = list()) {
   geometry <- sf::st_polygon(list(coords))
 
   #Description of the pieces
-  piece <- new_pattern_piece(
+  piece1 <- new_pattern_piece(
     id = "side1",
     geometry = geometry
   )
 
-  piece <- new_pattern_piece(
+  piece2 <- new_pattern_piece(
     id = "side2",
     geometry = geometry
   )
@@ -58,7 +58,7 @@ generate_circleskirt <- function(measurements, options = list()) {
   new_pattern(
     id = "circleskirt",
     units = "cm",
-    pieces = list(piece)
+    pieces = list(piece1, piece2)
   )
   
 }
