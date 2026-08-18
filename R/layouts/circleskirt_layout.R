@@ -9,7 +9,7 @@
 #' @examples
 circleskirt_layout <- function(pattern, fabric_width){
     # find bounds of pattern piece
-    side_bbox <- st_bbox(pattern$pieces$side1$geometry)
+    side_bbox <- st_bbox(pattern$pieces[[1]]$geometry)
     # find the x and y dimensions
     dim_x  <- side_bbox["xmax"] - side_bbox["xmin"]
     dim_y <- side_bbox["ymax"] - side_bbox["ymin"]
