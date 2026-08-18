@@ -1,0 +1,256 @@
+/* -----------------------------------------------------------------------
+   styles.css
+   Owner: Fatemeh
+
+   Medieval / illuminated-manuscript theme.
+   Theme colour: #853953 (deep plum/wine, used throughout as "brand").
+   Fonts: Cinzel / Cinzel Decorative for headings (a carved-inscription
+   display face), EB Garamond for body text (an old-style serif close
+   in spirit to early printed type). Both loaded from Google Fonts in
+   app_ui.R.
+
+   The parchment texture, borders, and flourishes are all done with
+   plain CSS gradients/borders/pseudo-elements - no external image
+   files are used anywhere in this stylesheet.
+----------------------------------------------------------------------- */
+
+:root {
+  --brand:        #853953;
+  --brand-dark:   #5f2939;
+  --brand-light:  #f4e9ed;
+  --ink:          #3a2a1c;
+  --gold:         #a9822f;
+  --parchment:    #f2e6cd;
+  --parchment-dk: #e8d8b4;
+}
+
+/* ---- Base page: parchment texture (pure CSS, layered gradients) ---- */
+body {
+  font-family: 'EB Garamond', Georgia, serif;
+  color: var(--ink);
+  font-size: 17px;
+  background-color: var(--parchment);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(169, 130, 47, 0.10) 0%, transparent 45%),
+    radial-gradient(circle at 80% 0%,  rgba(133, 57, 83, 0.08)  0%, transparent 40%),
+    radial-gradient(circle at 60% 90%, rgba(169, 130, 47, 0.10) 0%, transparent 45%),
+    repeating-linear-gradient(0deg, rgba(58,42,28,0.02) 0px, rgba(58,42,28,0.02) 1px, transparent 1px, transparent 3px);
+  background-attachment: fixed;
+}
+
+/* ---- Headings, carved-inscription style ---- */
+h1, h2, h3, h4, h5 {
+  font-family: 'Cinzel', Georgia, serif;
+  color: var(--brand-dark);
+  letter-spacing: 0.02em;
+}
+
+label, .control-label {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 0.85em;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+/* ---- Page title banner ---- */
+.app-title {
+  text-align: center;
+  padding: 18px 0 10px 0;
+  margin-bottom: 10px;
+  border-bottom: 3px double var(--gold);
+}
+.app-logo {
+  width: 64px;
+  height: 64px;
+  display: block;
+  margin: 0 auto 6px auto;
+}
+.app-title h1 {
+  font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+  font-size: 2.4em;
+  margin: 0;
+  color: var(--brand-dark);
+  text-shadow: 1px 1px 0 rgba(169, 130, 47, 0.25);
+}
+.title-flourish {
+  color: var(--gold);
+  font-size: 1.1em;
+  margin-top: 4px;
+  letter-spacing: 0.6em;
+}
+
+/* ---- Historical intro banner: styled like a small illuminated scroll --- */
+.history-banner {
+  position: relative;
+  background-color: var(--parchment-dk);
+  border: 1px solid var(--gold);
+  box-shadow: inset 0 0 0 3px var(--parchment), 0 2px 6px rgba(58, 42, 28, 0.15);
+  padding: 18px 28px;
+  margin-bottom: 22px;
+  border-radius: 2px;
+}
+.history-banner h4 {
+  margin-top: 0;
+  font-size: 1.2em;
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 6px;
+  display: inline-block;
+}
+.history-banner p {
+  line-height: 1.55;
+  margin-bottom: 0.7em;
+}
+.history-banner p:first-of-type::first-letter {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2.6em;
+  color: var(--brand);
+  float: left;
+  line-height: 0.8;
+  padding-right: 8px;
+  padding-top: 4px;
+}
+/* corner flourishes */
+.history-banner::before,
+.history-banner::after {
+  content: "\2766";
+  position: absolute;
+  color: var(--gold);
+  font-size: 1.1em;
+  top: 6px;
+}
+.history-banner::before { left: 8px; }
+.history-banner::after  { right: 8px; }
+
+/* ---- Sidebar / well panels: parchment card with ornate border ---- */
+.well {
+  background-color: var(--parchment-dk);
+  border: 1px solid var(--gold);
+  box-shadow: inset 0 0 0 3px var(--parchment);
+  border-top: 4px solid var(--brand);
+  border-radius: 2px;
+}
+
+/* ---- Inputs ---- */
+.form-control,
+select.form-control,
+.selectize-input {
+  background-color: var(--parchment);
+  border: 1px solid var(--gold);
+  color: var(--ink);
+  border-radius: 2px;
+}
+.form-control:focus,
+.selectize-input.focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 0.2rem rgba(133, 57, 83, 0.25);
+}
+
+/* ---- Buttons: wax-seal styling ---- */
+.btn-primary {
+  font-family: 'Cinzel', Georgia, serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.85em;
+  background-color: var(--brand);
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  padding: 10px 22px;
+  box-shadow: 0 2px 3px rgba(58, 42, 28, 0.3);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--brand-dark) !important;
+  border-color: var(--gold) !important;
+}
+
+/* ---- Links ---- */
+a { color: var(--brand); }
+a:hover { color: var(--brand-dark); }
+
+/* ---- Tabs (Pattern / Fabric layout / Results) ---- */
+.nav-tabs {
+  border-bottom: 2px solid var(--gold);
+}
+.nav-tabs .nav-link {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 0.9em;
+  letter-spacing: 0.03em;
+  color: var(--brand);
+  border: none;
+  background: transparent;
+}
+.nav-tabs .nav-link.active {
+  color: var(--brand-dark);
+  background-color: var(--parchment-dk);
+  border: 1px solid var(--gold);
+  border-bottom: 3px solid var(--brand);
+  font-weight: 600;
+}
+
+/* ---- Tab content panel ---- */
+.tab-content {
+  background-color: var(--parchment-dk);
+  border: 1px solid var(--gold);
+  border-top: none;
+  padding: 16px;
+}
+
+/* ---- Slider (Size adjustment %) ---- */
+.irs--shiny .irs-bar {
+  background: var(--brand);
+  border-top: 1px solid var(--brand);
+  border-bottom: 1px solid var(--brand);
+}
+.irs--shiny .irs-line {
+  background: var(--parchment);
+  border: 1px solid var(--gold);
+}
+.irs--shiny .irs-single,
+.irs--shiny .irs-from,
+.irs--shiny .irs-to {
+  background-color: var(--brand);
+  font-family: 'EB Garamond', serif;
+}
+.irs--shiny .irs-handle > i:first-child {
+  background-color: var(--brand);
+}
+.irs--shiny .irs-min,
+.irs--shiny .irs-max {
+  color: var(--brand-dark);
+  background-color: var(--parchment);
+  font-family: 'EB Garamond', serif;
+}
+.irs--shiny .irs-grid-text {
+  color: var(--ink);
+  font-family: 'EB Garamond', serif;
+}
+
+/* ---- Live-update note (replaces the old "Generate" button) ---- */
+.live-update-note {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.9em;
+  color: var(--brand-dark);
+  text-align: center;
+}
+
+/* ---- Validation errors: still legible, themed red ---- */
+.alert-danger {
+  background-color: #f6e3e3;
+  border: 1px solid #8b2e2e;
+  color: #6b1f1f;
+  font-family: 'EB Garamond', serif;
+  border-radius: 2px;
+}
+
+/* ---- Results table ---- */
+table {
+  font-family: 'EB Garamond', serif;
+}
+table th {
+  font-family: 'Cinzel', serif;
+  color: var(--brand-dark);
+  border-bottom: 2px solid var(--gold) !important;
+}
