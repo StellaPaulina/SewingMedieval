@@ -2,9 +2,7 @@
 # This function generate_bag() will return an object in the
 #format new_pattern() which includes id = "bag", units = "cm",
 #pieces which is a list of the following information new_pattern_piece(),
-#which includes; id = "full", geometry = geometry, quantity = 1, grainline = list(
-#x1 = 0, y1 = 0, x2 = 0, y2 = height), metadata which is a list of cut_on_fold = FALSE 
-# and name = "Full". 
+#which includes; id = "full", geometry = geometry.
 
 
 generate_bag <- function(measurements, options = list()) {
@@ -28,24 +26,12 @@ generate_bag <- function(measurements, options = list()) {
 
   piece <- new_pattern_piece(
     id = "full",
-    geometry = geometry,
-    quantity = 1,
-    grainline = list(
-      x1 = 0,
-      y1 = 0,
-      x2 = 0,
-      y2 = height
-    ),
-    metadata = list(
-      cut_on_fold = FALSE,
-      name = "Full"
-    )
+    geometry = geometry
   )
 
   new_pattern(
     id = "bag",
     units = "cm",
-    pieces = list(piece),
-    metadata = list()
+    pieces = list(piece)
   )
 }
