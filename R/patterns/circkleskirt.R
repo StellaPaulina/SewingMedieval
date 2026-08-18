@@ -2,7 +2,7 @@
 # This function generate_circleskirt() will return an object in the
 #format new_pattern() which includes id = "side", units = "cm",
 #pieces which is a list of the following information new_pattern_piece(),
-#which includes; id = "side", geometry = geometry, quantity = 2, grainline = NULL, metadata which is a list of seam_allowance = options$seam_allowance
+#which includes; id = "side", geometry = geometry, grainline = NULL, metadata which is a list of seam_allowance = options$seam_allowance
 # and name = "Side" 
 
 
