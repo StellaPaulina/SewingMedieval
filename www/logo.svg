@@ -1,0 +1,23 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sewing Pattern Generator crest">
+  <!-- outer parchment roundel -->
+  <circle cx="50" cy="50" r="47" fill="#f2e6cd" stroke="#a9822f" stroke-width="3"/>
+  <!-- inner ring -->
+  <circle cx="50" cy="50" r="38" fill="none" stroke="#853953" stroke-width="1.5"/>
+
+  <!-- compass-point flourishes -->
+  <g fill="#a9822f">
+    <path d="M50 4 L53 12 L50 10 L47 12 Z"/>
+    <path d="M50 96 L53 88 L50 90 L47 88 Z"/>
+    <path d="M4 50 L12 47 L10 50 L12 53 Z"/>
+    <path d="M96 50 L88 47 L90 50 L88 53 Z"/>
+  </g>
+
+  <!-- thread, stitched wave -->
+  <path d="M24 66 C34 55, 40 77, 50 66 C60 55, 66 77, 76 66"
+        fill="none" stroke="#a9822f" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- needle -->
+  <line x1="29" y1="72" x2="73" y2="27" stroke="#853953" stroke-width="3.2" stroke-linecap="round"/>
+  <circle cx="73" cy="27" r="3.4" fill="none" stroke="#853953" stroke-width="2.2"/>
+  <path d="M27 74 L34 71 L30 78 Z" fill="#853953"/>
+</svg>
