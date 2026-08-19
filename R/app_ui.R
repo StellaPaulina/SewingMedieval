@@ -3,89 +3,461 @@
 # Owner: Fatemeh
 #
 # Only depends on PATTERN_DEFS (constants.R).
-# so nothing here needs adjusting for naming choices.
+#
+# Includes:
+#   - Medieval Sewing title + logo
+#   - Welcome text
+#   - Dynamic pattern selection
+#   - Dynamic measurement controls
+#   - Live pattern visualization
+#   - Pattern description
+#   - Background audio with manual sound control
 # -----------------------------------------------------------------------
 
 app_ui <- function() {
+
   fluidPage(
 
+    # ===================================================================
+    # HEAD
+    # ===================================================================
+
     tags$head(
-      tags$link(rel = "preconnect", href = "https://fonts.googleapis.com"),
-      tags$link(rel = "preconnect", href = "https://fonts.gstatic.com", crossorigin = ""),
+
+      # ---------------------------------------------------------------
+      # Google Fonts
+      # ---------------------------------------------------------------
+
+      tags$link(
+        rel = "preconnect",
+        href = "https://fonts.googleapis.com"
+      ),
+
+      tags$link(
+        rel = "preconnect",
+        href = "https://fonts.gstatic.com",
+        crossorigin = ""
+      ),
+
       tags$link(
         rel = "stylesheet",
-        href = "https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap"
+        href = paste0(
+          "https://fonts.googleapis.com/css2?",
+          "family=Cinzel:wght@500;700&",
+          "family=Cinzel+Decorative:wght@700&",
+          "family=EB+Garamond:ital,wght@0,400;0,600;1,400&",
+          "display=swap"
+        )
       ),
-      tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+
+      # ---------------------------------------------------------------
+      # Main CSS
+      # ---------------------------------------------------------------
+
+      tags$link(
+        rel = "stylesheet",
+        type = "text/css",
+        href = "styles.css"
+      ),
+
+
+      # ===============================================================
+      # AUDIO JAVASCRIPT
+      # ===============================================================
+
+      tags$script(HTML("
+
+        $(document).on('shiny:connected', function() {
+
+          // -----------------------------------------------------------
+          // Find audio and button
+          // -----------------------------------------------------------
+
+          const audio =
+            document.getElementById('background-audio');
+
+          const button =
+            document.getElementById('sound_toggle');
+
+
+          // -----------------------------------------------------------
+          // Safety check
+          // -----------------------------------------------------------
+
+          if (!audio || !button) {
+
+            console.log(
+              'Audio element or sound button was not found.'
+            );
+
+            return;
+          }
+
+
+          // -----------------------------------------------------------
+          // Initial audio settings
+          // -----------------------------------------------------------
+
+          audio.volume = 0.35;
+
+          let soundEnabled = false;
+
+
+          // -----------------------------------------------------------
+          // Update button appearance
+          // -----------------------------------------------------------
+
+          function updateSoundButton() {
+
+            if (soundEnabled) {
+
+              button.innerHTML = '🔊 Sound On';
+
+            } else {
+
+              button.innerHTML = '🔇 Sound Off';
+            }
+          }
+
+
+          // -----------------------------------------------------------
+          // Start audio
+          // -----------------------------------------------------------
+
+          function startAudio() {
+
+            audio.volume = 0.35;
+
+            const playPromise = audio.play();
+
+
+            // ---------------------------------------------------------
+            // Modern browsers return a Promise from audio.play()
+            // ---------------------------------------------------------
+
+            if (playPromise !== undefined) {
+
+              playPromise
+
+                .then(function() {
+
+                  soundEnabled = true;
+
+                  updateSoundButton();
+
+                })
+
+                .catch(function(error) {
+
+                  console.log(
+                    'Browser prevented audio playback:',
+                    error
+                  );
+
+                  soundEnabled = false;
+
+                  updateSoundButton();
+                });
+
+            } else {
+
+              soundEnabled = true;
+
+              updateSoundButton();
+            }
+          }
+
+
+          // -----------------------------------------------------------
+          // Stop audio
+          // -----------------------------------------------------------
+
+          function stopAudio() {
+
+            audio.pause();
+
+            soundEnabled = false;
+
+            updateSoundButton();
+          }
+
+
+          // -----------------------------------------------------------
+          // SOUND BUTTON
+          // -----------------------------------------------------------
+
+          button.addEventListener(
+            'click',
+            function(event) {
+
+              // Prevent Shiny from doing anything unnecessary
+              event.preventDefault();
+
+              // -------------------------------------------------------
+              // If audio is currently playing -> stop it
+              // -------------------------------------------------------
+
+              if (!audio.paused) {
+
+                stopAudio();
+
+              }
+
+              // -------------------------------------------------------
+              // Otherwise -> start it
+              // -------------------------------------------------------
+
+              else {
+
+                startAudio();
+              }
+
+            }
+          );
+
+
+          // -----------------------------------------------------------
+          // Initial button state
+          // -----------------------------------------------------------
+
+          updateSoundButton();
+
+        });
+
+      "))
     ),
 
-    div(
-  class = "app-title",
 
-  div(
-    class = "title-text",
-    h1("Welcome"),
-    h3("to Sewing Medieval")
-  ),
-
-  tags$img(
-    src = "logo.svg",
-    class = "app-logo",
-    alt = "Sewing Pattern Generator crest"
-  )
-),
+    # ===================================================================
+    # TITLE + LOGO
+    # ===================================================================
 
     div(
-      class = "history-banner",
-      h4("Clothing in medieval Sweden"),
-      p(
-        "Sweden's medieval period runs roughly from 1050 to 1520 AD. It opens with the ",
-        "spread of Christianity through the 11th century and the gradual unification of ",
-        "small kingdoms into a single realm, and it closes on the eve of the Vasa era."
+      class = "app-title",
+
+      # ---------------------------------------------------------------
+      # Title
+      # ---------------------------------------------------------------
+
+      div(
+        class = "title-text",
+
+        h1("Welcome"),
+
+        h3("to Sewing Medieval")
       ),
-      p(
-        "Every garment was cut and hand-sewn to fit one specific wearer - there was no ",
-        "ready-made clothing. Wool and linen were the everyday fabrics, silk and fine ",
-        "dyed wool were reserved for the wealthy, and fur lined and trimmed cold-weather ",
-        "pieces like cloaks. Clothes were expensive to make, so they were worn until they ",
-        "wore out, then patched, handed down, or cut up for mending other garments - which ",
-        "is part of why fitted, minimal-waste shapes (rectangles, trapezoids, circle ",
-        "panels) show up again and again in the patterns in this app."
+
+      # ---------------------------------------------------------------
+      # Logo
+      # ---------------------------------------------------------------
+
+      tags$img(
+        src = "logo.svg",
+        class = "app-logo",
+        alt = "Sewing Pattern Generator crest"
       )
     ),
 
+
+    # ===================================================================
+    # SOUND CONTROL
+    # ===================================================================
+
+    div(
+      class = "sound-control",
+
+      # ---------------------------------------------------------------
+      # Audio file
+      # ---------------------------------------------------------------
+
+      tags$audio(
+        id = "background-audio",
+        src = "freesound.mp3",
+        loop = "loop",
+        preload = "auto"
+      ),
+
+      # ---------------------------------------------------------------
+      # Sound button
+      # ---------------------------------------------------------------
+
+      actionButton(
+        inputId = "sound_toggle",
+        label = "🔇 Sound Off",
+        class = "sound-button"
+      )
+    ),
+
+
+    # ===================================================================
+    # WELCOME MESSAGE
+    # ===================================================================
+
+    div(
+      class = "history-banner",
+
+      p(
+        "Hello, we are so glad that you have found this Medieval sewing pattern page!"
+      ),
+
+      p(
+        "You can have any level of previous sewing experience and use our ",
+        "visualization tool to learn about Medieval fashion. Surprisingly, ",
+        "sewing medieval is simple since it consists of patterns that use ",
+        "basic geometric shapes instantly recognizable. Let’s get to it!"
+      )
+    ),
+
+
+    # ===================================================================
+    # MAIN APPLICATION
+    # ===================================================================
+
     sidebarLayout(
+
+      # =================================================================
+      # SIDEBAR
+      # =================================================================
+
       sidebarPanel(
+
+        # ---------------------------------------------------------------
+        # Pattern selection
+        # ---------------------------------------------------------------
+
         selectInput(
-          "pattern", "Pattern",
-          choices  = PATTERN_CHOICES,
+          "pattern",
+          "Pattern",
+          choices = PATTERN_CHOICES,
           selected = PATTERN_CHOICES[1]
         ),
 
-        # Dynamic measurement inputs, built per selected pattern
-        uiOutput("measurement_inputs"),
+
+        # ---------------------------------------------------------------
+        # Dynamic measurement inputs
+        # ---------------------------------------------------------------
+
+        uiOutput(
+          "measurement_inputs"
+        ),
+
+
+        # ---------------------------------------------------------------
+        # Size adjustment
+        # ---------------------------------------------------------------
 
         sliderInput(
-          "size_scale", "Size adjustment (%)",
-          min = 80, max = 120, value = 100, step = 1
+          "size_scale",
+          "Size adjustment (%)",
+          min = 80,
+          max = 120,
+          value = 100,
+          step = 1
         ),
+
+
+        # ---------------------------------------------------------------
+        # Fabric width
+        # ---------------------------------------------------------------
 
         numericInput(
-          "fabric_width", "Fabric width (cm)",
-          value = DEFAULT_FABRIC_WIDTH, min = 1, max = 300
+          "fabric_width",
+          "Fabric width (cm)",
+          value = DEFAULT_FABRIC_WIDTH,
+          min = 1,
+          max = 300
         ),
 
+
+        # ---------------------------------------------------------------
+        # Separator
+        # ---------------------------------------------------------------
+
         hr(),
-        p(class = "live-update-note",
-          HTML("&#10022; Pattern updates automatically as you adjust any value.")),
-        uiOutput("validation_errors")
+
+
+        # ---------------------------------------------------------------
+        # Live update message
+        # ---------------------------------------------------------------
+
+        p(
+          class = "live-update-note",
+
+          HTML(
+            "&#10022; Pattern updates automatically as you adjust any value."
+          )
+        ),
+
+
+        # ---------------------------------------------------------------
+        # Validation messages
+        # ---------------------------------------------------------------
+
+        uiOutput(
+          "validation_errors"
+        ),
+
+
+        # ---------------------------------------------------------------
+        # Selected pattern description
+        # ---------------------------------------------------------------
+
+        uiOutput(
+          "pattern_description"
+        )
       ),
 
+
+      # =================================================================
+      # MAIN PANEL
+      # =================================================================
+
       mainPanel(
+
         tabsetPanel(
-          tabPanel("Pattern",       plotOutput("pattern_plot", height = "600px")),
-          tabPanel("Fabric layout", plotOutput("fabric_layout_plot", height = "600px")),
-          tabPanel("Results",       tableOutput("fabric_summary_table"))
+
+          # -------------------------------------------------------------
+          # Pattern
+          # -------------------------------------------------------------
+
+          tabPanel(
+
+            "Pattern",
+
+            plotOutput(
+              "pattern_plot",
+              height = "600px"
+            )
+          ),
+
+
+          # -------------------------------------------------------------
+          # Fabric layout
+          # -------------------------------------------------------------
+
+          tabPanel(
+
+            "Fabric layout",
+
+            plotOutput(
+              "fabric_layout_plot",
+              height = "600px"
+            )
+          ),
+
+
+          # -------------------------------------------------------------
+          # Results
+          # -------------------------------------------------------------
+
+          tabPanel(
+
+            "Results",
+
+            tableOutput(
+              "fabric_summary_table"
+            )
+          )
         )
       )
     )
