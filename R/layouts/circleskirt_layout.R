@@ -40,6 +40,9 @@ circleskirt_layout <- function(pattern, fabric_width){
         fabric_x <- 0
         fabric_y <- double_x/2
     }
+    else {
+        stop("Pattern is too large for fabric width")
+    }
     layout_result <- list(
         fabric = list(
             width = fabric_width,
