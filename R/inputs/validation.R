@@ -67,9 +67,15 @@ validate_inputs <- function(inputs) {
   }
 
   # --- build the standardized object -----------------------------------
+  # `options` was being dropped here even though generate_pattern() (via
+  # run_pipeline()) reads validated_inputs$options - pass it through
+  # (defaulting to an empty list) in case it's needed later. Currently
+  # always empty: seam allowance was removed from the app entirely (not
+  # something we're accounting for).
   list(
     pattern      = pattern,
     measurements = measurements[names(pattern_def$measurements)],
-    fabric       = list(width = fabric_width)
+    fabric       = list(width = fabric_width),
+    options      = if (is.null(inputs$options)) list() else inputs$options
   )
 }

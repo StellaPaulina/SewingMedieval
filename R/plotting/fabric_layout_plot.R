@@ -35,9 +35,16 @@ plot_fabric_layout <- function(pattern, layout) {
     )
   }
 
+  # NOTE: Liba's placements put the length axis along x and the fabric
+  # width along y (fabric_width is the knob the user turns, and it maps
+  # to the y-axis limit; the length required to cut everything comes
+  # out along x) - the opposite of what section 14 of the planning doc
+  # describes, but that's the convention her layout functions actually
+  # use and we're not changing layouts/, only how this plot draws the
+  # boundary box to match it.
   fabric_rect <- data.frame(
-    xmin = 0, xmax = layout$fabric$width,
-    ymin = 0, ymax = layout$fabric$length
+    xmin = 0, xmax = layout$fabric$length,
+    ymin = 0, ymax = layout$fabric$width
   )
 
   placed_sf <- do.call(rbind, lapply(layout$placements, function(placement) {
@@ -58,9 +65,14 @@ plot_fabric_layout <- function(pattern, layout) {
     geom <- rotate_geometry(geom, placement$rotation %||% 0)
     geom <- move_geometry(geom, placement$x %||% 0, placement$y %||% 0)
 
+    # >>> C: piece_display_info() (constants.R) looks up the display
+    # name from PATTERN_DEFS$pieces since Stella's pieces don't carry
+    # $metadata yet - same helper plot_pattern() uses, so labels agree
+    # between the Pattern and Fabric layout tabs.
+    info <- piece_display_info(pattern$id, placement$piece_id)
     sf::st_sf(
       piece_id = placement$piece_id,
-      name     = piece$metadata$name %||% placement$piece_id,
+      name     = info$name,
       geometry = sf::st_sfc(geom)
     )
   }))
@@ -81,7 +93,7 @@ plot_fabric_layout <- function(pattern, layout) {
         "Fabric width %.0f cm x required length %.0f cm",
         layout$fabric$width, layout$fabric$length
       ),
-      x = "cm", y = "cm"
+      x = "Required length (cm)", y = "Fabric width (cm)"
     ) +
     theme_minimal() +
     theme(legend.position = "none")

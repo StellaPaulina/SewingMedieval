@@ -25,22 +25,61 @@ normalize_pattern_pieces <- function(pattern) {
   pattern
 }
 
-#' >>> B: calculate_layout() dispatcher.
+#' >>> B: calculate_layout() dispatcher - the fabric-cutting layout.
 #'
 #' The planning doc's contract has calculate_layout(pattern, fabric_width)
-#' as Person B's public entry point, but Liba's code only defines the
-#' per-pattern functions (bag_layout(), and presumably
-#' underdress_layout()/circleskirt_layout() once those land). Mirrors
-#' the shape of Stella's generate_pattern() dispatcher above. Only
-#' "bag" is wired up for now - add the other branches here once their
-#' layout files are filled in.
+#' as Person B's public entry point. Liba's actual functions are named
+#' <pattern>_fabric_layout() (bag_fabric_layout(), underdress_fabric_layout(),
+#' circleskirt_fabric_layout()) - all three exist and pick whichever
+#' rotation minimizes required fabric length, so all three are wired
+#' up here. Mirrors the shape of Stella's generate_pattern() dispatcher
+#' above.
 calculate_layout <- function(pattern, fabric_width) {
 
   if (pattern$id == "bag") {
-    return(bag_layout(pattern = pattern, fabric_width = fabric_width))
+    return(bag_fabric_layout(pattern = pattern, fabric_width = fabric_width))
+  }
+
+  if (pattern$id == "underdress") {
+    return(underdress_fabric_layout(pattern = pattern, fabric_width = fabric_width))
+  }
+
+  if (pattern$id == "circleskirt") {
+    return(circleskirt_fabric_layout(pattern = pattern, fabric_width = fabric_width))
   }
 
   stop(sprintf("calculate_layout(): no layout implemented yet for pattern '%s'", pattern$id))
+}
+
+#' >>> B: calculate_pattern_layout() dispatcher - the "as it should
+#' look" assembled view, for the Pattern tab.
+#'
+#' Liba also wrote <pattern>_pattern_layout() functions
+#' (bag_pattern_layout(), underdress_pattern_layout(),
+#' circleskirt_pattern_layout()) that place every piece so the pattern
+#' displays sensibly (no fabric-width constraint, no length
+#' minimization - just a readable arrangement). These were not wired
+#' into the pipeline before, so plot_pattern() was drawing every piece
+#' in its own local (0,0)-based coordinates, stacking pieces like
+#' underdress's two identical body pieces directly on top of each
+#' other. This dispatcher feeds plot_pattern() the same kind of Layout
+#' object (placements only, no $fabric) that calculate_layout() feeds
+#' plot_fabric_layout().
+calculate_pattern_layout <- function(pattern) {
+
+  if (pattern$id == "bag") {
+    return(bag_pattern_layout(pattern = pattern))
+  }
+
+  if (pattern$id == "underdress") {
+    return(underdress_pattern_layout(pattern = pattern))
+  }
+
+  if (pattern$id == "circleskirt") {
+    return(circleskirt_pattern_layout(pattern = pattern))
+  }
+
+  stop(sprintf("calculate_pattern_layout(): no pattern layout implemented yet for pattern '%s'", pattern$id))
 }
 
 run_pipeline <- function(inputs) {
@@ -52,7 +91,14 @@ run_pipeline <- function(inputs) {
   pattern <- generate_pattern(validated_inputs)
   pattern <- normalize_pattern_pieces(pattern)
 
-  # Step 3: >>> B: calculate_layout() / bag_layout() is Liba's.
+  # Step 3a: >>> B: calculate_pattern_layout() / *_pattern_layout() is
+  # Liba's - the assembled "how the pattern should look" arrangement,
+  # displayed on the Pattern tab.
+  pattern_layout <- calculate_pattern_layout(pattern = pattern)
+
+  # Step 3b: >>> B: calculate_layout() / *_fabric_layout() is Liba's -
+  # the fabric-cutting layout (rotation chosen to minimize required
+  # fabric length), displayed on the Fabric layout tab.
   layout <- calculate_layout(
     pattern      = pattern,
     fabric_width = validated_inputs$fabric$width
@@ -65,10 +111,11 @@ run_pipeline <- function(inputs) {
   )
 
   list(
-    inputs  = validated_inputs,
-    pattern = pattern,
-    layout  = layout,
-    fabric  = fabric_result
+    inputs         = validated_inputs,
+    pattern        = pattern,
+    pattern_layout = pattern_layout,
+    layout         = layout,
+    fabric         = fabric_result
   )
 }
 

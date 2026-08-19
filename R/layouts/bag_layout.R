@@ -26,36 +26,47 @@ bag_fabric_layout <- function(pattern, fabric_width){
     # if all orientations fit the fabric length
     if (max(dim_x, dim_y) <= fabric_width) {
         index_min <- which(c(dim_x, dim_y) == min(c(dim_x, dim_y)))
-        # plot with smaller dimension as the length of fabric
+        # BUGFIX (Fatemeh): whichever axis stays un-rotated becomes the
+        # fabric LENGTH (the piece's y-extent after any rotation) - this
+        # was swapped, assigning the *width* dimension as if it were the
+        # required length, so the returned fabric rectangle didn't
+        # actually contain the placed piece. Confirmed against
+        # tests/testthat/test-layouts.R and test-pipeline.R, which
+        # already encoded the correct expected values (18x80 -> no
+        # rotation, length 80; 100x20 -> rotate 90, length 100).
         if (index_min == 1) {
             angle <- 0
             x <- 0
             y <- 0
-            minimum_fabric <- dim_x
+            minimum_fabric <- dim_y
         }
         else {
             angle <- 90
             x <- dim_y
             y <- 0
-            minimum_fabric <- dim_y
+            minimum_fabric <- dim_x
         }
     }
     else if (min(dim_x, dim_y) > fabric_width) { #there is no way to rotate
         stop("Pattern is too large for fabric width")
     }
     else {
+        # Only one orientation fits fabric_width at all - same fix as
+        # above, plus the angle choice itself was inverted here (it was
+        # rotating exactly when rotation wasn't needed, and vice versa),
+        # which would have placed a piece wider than the fabric.
         index_min <- which(c(dim_x, dim_y) == min(c(dim_x, dim_y)))
-        if (index_min == 2) {
+        if (index_min == 1) {
             angle <- 0
             x <- 0
             y <- 0
-            minimum_fabric <- dim_x
+            minimum_fabric <- dim_y
         }
         else {
             angle <- 90
             x <- dim_y
             y <- 0
-            minimum_fabric <- dim_y
+            minimum_fabric <- dim_x
         }
     }
     

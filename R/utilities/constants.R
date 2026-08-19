@@ -20,7 +20,7 @@ PATTERN_DEFS <- list(
     pieces = list(
       full = list(name = "Full (cut on fold)", quantity = 1)
     )
-  )
+  ),
 
   underdress = list(
     label = "Underdress / Undershirt",
@@ -30,7 +30,12 @@ PATTERN_DEFS <- list(
       neck_shoulder     = list(label = "Neck to Shoulder (cm)",  min = 1, max = 40,  default = 12),
       shoulder_shoulder = list(label = "Shoulder to Shoulder (cm)", min = 1, max = 80, default = 40),
       length            = list(label = "Length (cm)",            min = 1, max = 200, default = 100),
-      bust              = list(label = "Bust (cm)",               min = 1, max = 200, default = 90)
+      bust              = list(label = "Bust (cm)",               min = 1, max = 200, default = 90),
+      # Stella's generate_underdress() also reads measurements$armlength
+      # (shoulder to wrist) to build the sleeve piece, but it was left
+      # out of the agreed measurement list - added here so the UI
+      # collects it and validate_inputs() lets it through.
+      armlength         = list(label = "Arm length, shoulder to wrist (cm)", min = 1, max = 100, default = 58)
     ),
     pieces = list(
       body   = list(name = "Body",   quantity = 2),
@@ -56,3 +61,23 @@ PATTERN_CHOICES <- setNames(
 )
 
 DEFAULT_FABRIC_WIDTH <- 140
+
+#' Look up display name/quantity for a pattern piece from PATTERN_DEFS.
+#'
+#' Stella's pieces only carry $id and $geometry (no $metadata/$quantity
+#' yet), and multi-instance piece ids are suffixed with a number (e.g.
+#' "body1", "body2", "sleeve1"), while PATTERN_DEFS$pieces is keyed by
+#' the un-suffixed base id ("body", "sleeve"). This bridges the two so
+#' the plots can show "Body x2" instead of the raw id "body1".
+#'
+#' @param pattern_id character, e.g. "underdress"
+#' @param piece_id character, e.g. "body1"
+#' @return list(name, quantity)
+piece_display_info <- function(pattern_id, piece_id) {
+  base_id <- sub("[0-9]+$", "", piece_id)
+  spec <- PATTERN_DEFS[[pattern_id]]$pieces[[base_id]]
+  list(
+    name     = if (!is.null(spec)) spec$name else piece_id,
+    quantity = if (!is.null(spec)) spec$quantity else 1
+  )
+}

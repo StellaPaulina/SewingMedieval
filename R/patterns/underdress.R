@@ -77,7 +77,13 @@ generate_underdress <- function(measurements, options = list()) {
       
         # Bottom
         c(0, length),
-        c(-half_bottom, length)
+        c(-half_bottom, length),
+
+        # Close the ring back to the starting vertex - sf::st_polygon()
+        # requires first == last or it errors with "polygons not (all)
+        # closed" (confirmed: without this the piece can't be built at
+        # all). The sleeve ring below already closes itself this way.
+        c(-half_shoulder, 0)
       )
     )
   )

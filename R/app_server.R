@@ -97,7 +97,7 @@ app_server <- function(input, output, session) {
       pattern      = input$pattern,
       measurements = measurements,
       fabric       = list(width = input$fabric_width),
-      options      = list(seam_allowance = input$seam_allowance)
+      options      = list()
     )
   })
 
@@ -126,7 +126,7 @@ app_server <- function(input, output, session) {
   output$pattern_plot <- renderPlot({
     out <- pipeline_output()
     req(out$result)
-    plot_pattern(out$result$pattern)
+    plot_pattern(out$result$pattern, out$result$pattern_layout)
   })
 
   # --- fabric layout plot ---------------------------------------------------

@@ -75,11 +75,6 @@ app_ui <- function() {
           value = DEFAULT_FABRIC_WIDTH, min = 1, max = 300
         ),
 
-        numericInput(
-          "seam_allowance", "Seam allowance (cm)",
-          value = DEFAULT_SEAM_ALLOWANCE, min = 0, max = 10, step = 0.5
-        ),
-
         hr(),
         p(class = "live-update-note",
           HTML("&#10022; Pattern updates automatically as you adjust any value.")),
