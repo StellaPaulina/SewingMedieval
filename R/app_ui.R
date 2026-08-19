@@ -20,11 +20,18 @@ app_ui <- function() {
     ),
 
     div(
-      class = "app-title",
-      tags$img(src = "logo.svg", class = "app-logo", alt = "Sewing Pattern Generator crest"),
-      h1("Sewing Pattern Generator"),
-      div(class = "title-flourish", HTML("&#10086;"))
-    ),
+  class = "app-title",
+
+  h1("Welcome"),
+
+  h2("to Sewing Medieval"),
+
+  tags$img(
+    src = "logo.svg",
+    class = "app-logo",
+    alt = "Sewing Pattern Generator crest"
+  )
+),
 
     div(
       class = "history-banner",
