@@ -7,7 +7,7 @@
 #'
 #' @export
 #' @examples
-circleskirt_layout <- function(pattern, fabric_width){
+circleskirt_fabric_layout <- function(pattern, fabric_width){
     # find bounds of pattern piece
     side_bbox <- st_bbox(pattern$pieces[[1]]$geometry)
     # find the x and y dimensions
