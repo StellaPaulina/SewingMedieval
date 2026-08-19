@@ -16,7 +16,7 @@ circleskirt_fabric_layout <- function(pattern, fabric_width){
     double_x <- 2*dim_x[[1]]
     double_y <- 2*dim_y[[1]]
     # dim x should always be larger than y
-    if (fabric_width >= double_x) {
+    if (fabric_width >= double_y) {
         # hourglass configuration, same maximum dimensions as double D
         angle1 <- 0
         angle2 <- 180
