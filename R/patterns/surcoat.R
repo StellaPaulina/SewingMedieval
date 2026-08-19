@@ -127,7 +127,7 @@ generate_surcoat <- function(measurements, options = list()) {
 
   piece6 <- new_pattern_piece(
     id = "side4",
-    geometry = gexometry_side
+    geometry = geometry_side
   )
 
   new_pattern(
