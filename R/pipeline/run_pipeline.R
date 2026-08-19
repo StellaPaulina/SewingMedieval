@@ -48,6 +48,10 @@ calculate_layout <- function(pattern, fabric_width) {
     return(circleskirt_fabric_layout(pattern = pattern, fabric_width = fabric_width))
   }
 
+  if (pattern$id == "surcoat") {
+    return(surcoat_fabric_layout(pattern = pattern, fabric_width = fabric_width))
+  }
+
   stop(sprintf("calculate_layout(): no layout implemented yet for pattern '%s'", pattern$id))
 }
 
@@ -77,6 +81,10 @@ calculate_pattern_layout <- function(pattern) {
 
   if (pattern$id == "circleskirt") {
     return(circleskirt_pattern_layout(pattern = pattern))
+  }
+
+  if (pattern$id == "surcoat") {
+    return(surcoat_pattern_layout(pattern = pattern))
   }
 
   stop(sprintf("calculate_pattern_layout(): no pattern layout implemented yet for pattern '%s'", pattern$id))
@@ -148,6 +156,13 @@ generate_pattern <- function(inputs) {
 
   if (inputs$pattern == "circleskirt") {
     return(generate_circleskirt(
+      measurements = inputs$measurements,
+      options = inputs$options
+    ))
+  }
+
+  if (inputs$pattern == "surcoat") {
+    return(generate_surcoat(
       measurements = inputs$measurements,
       options = inputs$options
     ))

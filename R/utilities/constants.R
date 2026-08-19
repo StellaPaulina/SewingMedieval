@@ -52,6 +52,21 @@ PATTERN_DEFS <- list(
     pieces = list(
       side = list(name = "Side (C.Back/Side + C.Front/Side)", quantity = 2)
     )
+  ),
+
+  surcoat = list(
+    label = "Surcoat / Sideless surcote (pellote)",
+    measurements = list(
+      bust              = list(label = "Bust (cm)",                  min = 1, max = 200, default = 90),
+      length            = list(label = "Length (cm)",                min = 1, max = 200, default = 100),
+      shoulder_shoulder = list(label = "Shoulder to Shoulder (cm)",  min = 1, max = 80,  default = 40),
+      neck_shoulder     = list(label = "Neck to Shoulder (cm)",      min = 1, max = 40,  default = 12),
+      armhole           = list(label = "Shoulder to Armhole (cm)",   min = 1, max = 80,  default = 42)
+    ),
+    pieces = list(
+      body = list(name = "Body (front/back)", quantity = 2),
+      side = list(name = "Side panel",        quantity = 4)
+    )
   )
 )
 

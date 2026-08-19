@@ -47,6 +47,21 @@ plot_fabric_layout <- function(pattern, layout) {
     ymin = 0, ymax = layout$fabric$width
   )
 
+  # Fold line - Liba's layout functions already return fold_x/fold_y
+  # (the point the fold passes through). A non-zero fold_x means a
+  # vertical fold (spans the fabric width); a non-zero fold_y means a
+  # horizontal fold (spans the required length). Both 0 (e.g. the bag,
+  # a single piece with no fold in this layout) means no fold to draw.
+  fold_x <- layout$fabric$fold_x %||% 0
+  fold_y <- layout$fabric$fold_y %||% 0
+
+  fold_line <- NULL
+  if (!isTRUE(all.equal(fold_x, 0))) {
+    fold_line <- data.frame(x = fold_x, xend = fold_x, y = 0, yend = layout$fabric$width)
+  } else if (!isTRUE(all.equal(fold_y, 0))) {
+    fold_line <- data.frame(x = 0, xend = layout$fabric$length, y = fold_y, yend = fold_y)
+  }
+
   placed_sf <- do.call(rbind, lapply(layout$placements, function(placement) {
     piece <- pattern$pieces[[placement$piece_id]]
     if (is.null(piece)) return(NULL)
@@ -77,12 +92,23 @@ plot_fabric_layout <- function(pattern, layout) {
     )
   }))
 
-  ggplot() +
+  p <- ggplot() +
     geom_rect(
       data = fabric_rect,
       aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
       fill = NA, color = "grey40", linewidth = 0.6
-    ) +
+    )
+
+  if (!is.null(fold_line)) {
+    p <- p +
+      geom_segment(
+        data = fold_line,
+        aes(x = x, xend = xend, y = y, yend = yend),
+        color = "#DF301C", linetype = "dashed", linewidth = 0.8
+      )
+  }
+
+  p +
     geom_sf(data = placed_sf, aes(fill = piece_id), alpha = 0.4, color = "black") +
     geom_sf_text(data = placed_sf, aes(label = name), size = 3,
                  fun.geometry = sf::st_centroid) +
