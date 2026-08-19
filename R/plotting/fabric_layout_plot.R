@@ -1,0 +1,90 @@
+# -----------------------------------------------------------------------
+# fabric_layout_plot.R
+# Owner: Fatemeh
+#
+# Contract (per Planning session, section 11):
+#   plot_fabric_layout(pattern, layout) -> ggplot object
+#
+#   pattern tells it what each piece looks like (geometry),
+#   layout   tells it where each piece goes (x, y, rotation, flipped).
+#
+# Depends only on the agreed Pattern / Layout object shapes, not on
+# what A/B call their internal functions. Rotation/translation reuse
+# Stella's own rotate_geometry()/move_geometry() from
+# geometry/geometry_utils.R instead of re-implementing the matrix math
+# here, so there is exactly one place in the codebase that knows how a
+# piece gets rotated.
+# -----------------------------------------------------------------------
+
+library(ggplot2)
+library(sf)
+
+#' Plot pieces placed on the fabric, per the layout returned by
+#' Person B's calculate_layout().
+#'
+#' @param pattern Pattern object (for piece geometry)
+#' @param layout  Layout object (for placements + fabric dims)
+#' @return a ggplot object
+plot_fabric_layout <- function(pattern, layout) {
+
+  if (is.null(layout) || length(layout$placements) == 0) {
+    return(
+      ggplot() +
+        annotate("text", x = 0, y = 0, label = "No layout to display") +
+        theme_void()
+    )
+  }
+
+  fabric_rect <- data.frame(
+    xmin = 0, xmax = layout$fabric$width,
+    ymin = 0, ymax = layout$fabric$length
+  )
+
+  placed_sf <- do.call(rbind, lapply(layout$placements, function(placement) {
+    piece <- pattern$pieces[[placement$piece_id]]
+    if (is.null(piece)) return(NULL)
+
+    geom <- piece$geometry
+
+    # Mirror first if flipped - no shared utility for this yet, so it
+    # stays local here (there's nothing to route through A's file).
+    if (!is.null(placement$flipped) && isTRUE(placement$flipped)) {
+      geom <- geom * matrix(c(-1, 0, 0, 1), 2, 2)
+    }
+
+    # >>> A: rotate_geometry()/move_geometry() from geometry_utils.R -
+    # reuse Stella's utilities rather than duplicating the rotation
+    # math here. Her rotation is in degrees, same as Liba's placements.
+    geom <- rotate_geometry(geom, placement$rotation %||% 0)
+    geom <- move_geometry(geom, placement$x %||% 0, placement$y %||% 0)
+
+    sf::st_sf(
+      piece_id = placement$piece_id,
+      name     = piece$metadata$name %||% placement$piece_id,
+      geometry = sf::st_sfc(geom)
+    )
+  }))
+
+  ggplot() +
+    geom_rect(
+      data = fabric_rect,
+      aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = NA, color = "grey40", linewidth = 0.6
+    ) +
+    geom_sf(data = placed_sf, aes(fill = piece_id), alpha = 0.4, color = "black") +
+    geom_sf_text(data = placed_sf, aes(label = name), size = 3,
+                 fun.geometry = sf::st_centroid) +
+    coord_sf(expand = FALSE) +
+    labs(
+      title = "Fabric layout",
+      subtitle = sprintf(
+        "Fabric width %.0f cm x required length %.0f cm",
+        layout$fabric$width, layout$fabric$length
+      ),
+      x = "cm", y = "cm"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "none")
+}
+
+`%||%` <- function(a, b) if (is.null(a)) b else a

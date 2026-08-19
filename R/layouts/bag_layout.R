@@ -8,6 +8,15 @@
 #' @export
 #' @examples
 bag_layout <- function(pattern, fabric_width){
+    if (is.null(pattern)) {
+        stop("Pattern is required")
+    }
+    if (pattern$id != "bag") {
+        stop("Invalid pattern type")
+    }
+    if (is.null(pattern$pieces$full)){
+        stop("Bag pattern piece full is required")
+    }
     # find bounds of pattern piece
     full_bbox <- st_bbox(pattern$pieces[[1]]$geometry)
     # find the x and y dimensions
