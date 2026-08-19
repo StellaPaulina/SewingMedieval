@@ -55,29 +55,49 @@ label, .control-label {
 
 /* ---- Page title banner ---- */
 .app-title {
-  text-align: center;
-  padding: 18px 0 10px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  padding: 18px 40px 15px 40px;
   margin-bottom: 10px;
+
   border-bottom: 3px double var(--gold);
 }
-.app-logo {
-  width: 64px;
-  height: 64px;
-  display: block;
-  margin: 0 auto 6px auto;
+
+/* ---- Titles on the left ---- */
+.title-text {
+  grid-column: 1;
+  text-align: left;
+  padding-left: 20px;
 }
-.app-title h1 {
+
+.title-text h1 {
   font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
-  font-size: 2.4em;
+  font-size: 3em;
   margin: 0;
   color: var(--brand-dark);
   text-shadow: 1px 1px 0 rgba(169, 130, 47, 0.25);
 }
-.title-flourish {
-  color: var(--gold);
-  font-size: 1.1em;
-  margin-top: 4px;
-  letter-spacing: 0.6em;
+
+.title-text h3 {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 1.4em;
+  font-weight: 500;
+  margin: 2px 0 0 35px;
+  color: var(--brand);
+  letter-spacing: 0.04em;
+}
+
+/* ---- Large centered logo ---- */
+.app-logo {
+  grid-column: 2;
+
+  width: 220px;
+  height: auto;
+
+  display: block;
+  margin: 0 auto;
 }
 
 /* ---- Historical intro banner: styled like a small illuminated scroll --- */

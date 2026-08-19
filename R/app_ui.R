@@ -22,9 +22,11 @@ app_ui <- function() {
     div(
   class = "app-title",
 
-  h1("Welcome"),
-
-  h2("to Sewing Medieval"),
+  div(
+    class = "title-text",
+    h1("Welcome"),
+    h3("to Sewing Medieval")
+  ),
 
   tags$img(
     src = "logo.svg",
