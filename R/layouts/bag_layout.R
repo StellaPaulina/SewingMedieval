@@ -7,7 +7,7 @@
 #'
 #' @export
 #' @examples
-bag_layout <- function(pattern, fabric_width){
+bag_fabric_layout <- function(pattern, fabric_width){
     if (is.null(pattern)) {
         stop("Pattern is required")
     }

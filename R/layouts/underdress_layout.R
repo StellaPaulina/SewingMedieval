@@ -7,7 +7,7 @@
 #'
 #' @export
 #' @examples
-underdress_layout <- function(pattern, fabric_width){
+underdress_fabric_layout <- function(pattern, fabric_width){
     # find bounds of body
     index_b <- which(sapply(pattern$pieces, function(p) p$id) == "body1")
     body_bbox <- st_bbox(pattern$pieces[[index_b[1]]]$geometry)

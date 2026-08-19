@@ -7,7 +7,7 @@
 #'
 #' @export
 #' @examples
-circleskirt_layout <- function(pattern, fabric_width){
+circleskirt_fabric_layout <- function(pattern, fabric_width){
     # find bounds of pattern piece
     side_bbox <- st_bbox(pattern$pieces[[1]]$geometry)
     # find the x and y dimensions
@@ -39,6 +39,9 @@ circleskirt_layout <- function(pattern, fabric_width){
         minimum_fabric <- double_x
         fabric_x <- 0
         fabric_y <- double_x/2
+    }
+    else {
+        stop("Pattern is too large for fabric width")
     }
     layout_result <- list(
         fabric = list(
