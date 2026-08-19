@@ -3,7 +3,7 @@
 #format new_pattern() which includes id = "surcoat", units = "cm",
 #pieces which is a list of the following information pieces(),
 #which includes a list containing id and geometry of each piece.
-#The pieces are body1 and body2 as well as side1 and side2.
+#The pieces are body1 and body2 as well as sideleft1&2 and sideright1&2.
 
 
 generate_surcoat <- function(measurements, options = list()) {
@@ -54,33 +54,33 @@ generate_surcoat <- function(measurements, options = list()) {
   )
 
   geometry <- sf::st_polygon(
-    list(
-      rbind(
-        # Left shoulder
-        c(-half_shoulder, 0),
+  list(
+    rbind(
+      # Left shoulder
+      c(-half_shoulder, 0),
 
-        # Left side of neck opening
-        c(-half_neck, 0),
+      # Left side of neck opening
+      c(-half_neck, 0),
 
-        # Neck curve, left -> right
-        cbind(
-          neck_x,
-          neck_y
-        ),
+      # Neck curve, left -> right
+      cbind(neck_x, neck_y),
 
-        # Right shoulder
-        c(half_shoulder, 0),
+      # Right shoulder
+      c(half_shoulder, 0),
 
-        c(half_bottom, length),
-      
-        # Bottom
-        c(0, length),
-        c(-half_bottom, length)
-      )
+      # Bottom-right
+      c(half_bottom, length),
+
+      # Bottom-left
+      c(-half_bottom, length),
+
+      # Close polygon
+      c(-half_shoulder, 0)
     )
   )
+)
 
-  geometry_trapezoid <- sf::st_polygon(
+  geometry_side<- sf::st_polygon(
     list(
       matrix(
         c(
@@ -99,6 +99,7 @@ generate_surcoat <- function(measurements, options = list()) {
     )
   )
 
+
   piece1 <- new_pattern_piece(
     id = "body1",
     geometry = geometry
@@ -111,17 +112,27 @@ generate_surcoat <- function(measurements, options = list()) {
 
   piece3 <- new_pattern_piece(
     id = "side1",
-    geometry = geometry_trapezoid
+    geometry = geometry_side
   )
 
   piece4 <- new_pattern_piece(
     id = "side2",
-    geometry = geometry_trapezoid
+    geometry = geometry_side
+  )
+
+  piece5 <- new_pattern_piece(
+    id = "side3",
+    geometry = geometry_side
+  )
+
+  piece6 <- new_pattern_piece(
+    id = "side4",
+    geometry = gexometry_side
   )
 
   new_pattern(
     id = "surcoat",
     units = "cm",
-    pieces = list(piece1, piece2, piece3, piece4)
+    pieces = list(piece1, piece2, piece3, piece4, piece5, piece6)
   )
 }
