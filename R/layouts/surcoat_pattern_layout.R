@@ -43,28 +43,28 @@ surcoat_pattern_layout <- function(pattern) {
         piece_id = "side1",
         x = -(body_bottom / 2) - 10,
         y = -(body_length - side_length) + 10,
-        rotation = 170,
+        rotation = 165,
         flipped = FALSE
       ),
       list(
         piece_id = "side2",
         x = -(body_bottom / 2),
         y = -(body_length - side_length),
-        rotation = 170,
+        rotation = 165,
         flipped = FALSE
       ),
       list(
         piece_id = "side3",
-        x = (body_bottom / 2),
-        y = -(body_length - side_length),
-        rotation = 190,
+        x = (body_bottom / 2) -10,
+        y = -(body_length - side_length) +10,
+        rotation = 195,
         flipped = FALSE
       ),
       list(
         piece_id = "side4",
-        x = 0,
-        y = 0,
-        rotation = 0,
+        x = (body_bottom / 2) ,
+        y = -(body_length - side_length),
+        rotation = 195,
         flipped = FALSE
       )
     )
