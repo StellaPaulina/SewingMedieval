@@ -6,29 +6,31 @@
 #The pieces are front and back as well as left and right arm.
 
 
-generate_underdress() <- function(measurements, options = list()) {
+generate_underdress <- function(measurements, options = list()) {
 
-  chest  <- measurements$chest #Needed as input in measurements (width of chest)
-  length <- measurements$length #Needed as input in measurements (length of garment, shoulder to heel)
-  shoulder_width <- measurements$shoulder #Needed as input in measurements (shoulder to shoulder)
+  bust  <- measurements$bust #Needed as input in measurements
+  length <- measurements$length #Needed as input in measurements
+  shoulder_shoulder <- measurements$shoulder_shoulder #Needed as input in measurements
   armlength <- measurements$armlength #Needed as input in measurements (shoulder to hand)
-  wrist <- measurements$wrist #Needed as input in measurements (circumference of wrist)
+  neck_shoulder <- measurements$neck_shoulder #Needed as input in measurements
+  wrist <- measurements$wrist #Needed as input in measurements
   armhole <- measurements$armhole #Needed as input in measurements (shoulder to armhole)
-
-  #hem_drop = (neck_width / 2) * 0.5
-  #could be added
-
+  
   # Bottom is approximately 1.8 times
   # the shoulder width
-  bottom_width <- shoulder_width * 1.8
+  bottom_width <- shoulder_shoulder * 1.8
+
+  #Armhole
+  half_armhole <- armhole / 2
+  half_wrist <- wrist /2
 
   # Neck dimensions
-  neck_width <- measurements$neck_width
-  neck_depth <- measurements$neck_depth
+  neck_width <- shoulder_shoulder - neck_shoulder
+  neck_depth <- neck_width
 
-  half_shoulder <- shoulder_width / 2
+  half_shoulder <- shoulder_shoulder / 2
   half_bottom <- bottom_width / 2
-  half_neck <- neck_width / 2
+  half_neck <- neck_width / 4
 
   # x coordinates across the neck opening
   neck_x <- seq(
@@ -71,16 +73,11 @@ generate_underdress() <- function(measurements, options = list()) {
         # Right shoulder
         c(half_shoulder, 0),
 
-        # Right side / flare
-        c(half_bottom, garment_length),
-
+        c(half_bottom, length),
+      
         # Bottom
-        c(0, garment_length),
-
-        c(-half_bottom, garment_length),
-
-        # Back up left side
-        c(-half_shoulder, 0)
+        c(0, length),
+        c(-half_bottom, length)
       )
     )
   )
@@ -92,9 +89,9 @@ generate_underdress() <- function(measurements, options = list()) {
           -half_armhole, 0,
            half_armhole, 0,
 
-           half_wrist, arm_length,
+           half_wrist, armlength,
 
-          -half_wrist, arm_length,
+          -half_wrist, armlength,
 
           -half_armhole, 0
         ),
