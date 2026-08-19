@@ -18,4 +18,5 @@ bag_pattern_layout <- function(pattern) {
       )
     )
   )
+  return (layout_result)
 }
