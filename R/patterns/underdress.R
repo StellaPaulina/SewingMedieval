@@ -13,7 +13,7 @@ generate_underdress() <- function(measurements, options = list()) {
   shoulder_width <- measurements$shoulder #Needed as input in measurements (shoulder to shoulder)
   armlength <- measurements$armlength #Needed as input in measurements (shoulder to hand)
   wrist <- measurements$wrist #Needed as input in measurements (circumference of wrist)
-  armhole <- measurement$armhole #Needed as input in measurements (shoulder to armhole)
+  armhole <- measurements$armhole #Needed as input in measurements (shoulder to armhole)
 
   #hem_drop = (neck_width / 2) * 0.5
   #could be added
@@ -105,22 +105,22 @@ generate_underdress() <- function(measurements, options = list()) {
   )
 
   piece1 <- new_pattern_piece(
-    id = "front",
+    id = "body1",
     geometry = geometry
   )
 
   piece2 <- new_pattern_piece(
-    id = "back",
+    id = "body2",
     geometry = geometry
   )
 
   piece3 <- new_pattern_piece(
-    id = "leftarm",
+    id = "sleeve1",
     geometry = geometry_arm
   )
 
   piece4 <- new_pattern_piece(
-    id = "rightarm",
+    id = "sleeve2",
     geometry = geometry_arm
   )
 
