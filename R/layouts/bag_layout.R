@@ -38,13 +38,13 @@ bag_fabric_layout <- function(pattern, fabric_width){
             angle <- 0
             x <- 0
             y <- 0
-            minimum_fabric <- dim_y
+            minimum_fabric <- dim_x
         }
         else {
             angle <- 90
             x <- dim_y
             y <- 0
-            minimum_fabric <- dim_x
+            minimum_fabric <- dim_y
         }
     }
     else if (min(dim_x, dim_y) > fabric_width) { #there is no way to rotate
@@ -56,17 +56,17 @@ bag_fabric_layout <- function(pattern, fabric_width){
         # rotating exactly when rotation wasn't needed, and vice versa),
         # which would have placed a piece wider than the fabric.
         index_min <- which(c(dim_x, dim_y) == min(c(dim_x, dim_y)))
-        if (index_min == 1) {
+        if (index_min == 2) {
             angle <- 0
             x <- 0
             y <- 0
-            minimum_fabric <- dim_y
+            minimum_fabric <- dim_x
         }
         else {
             angle <- 90
             x <- dim_y
             y <- 0
-            minimum_fabric <- dim_x
+            minimum_fabric <- dim_y
         }
     }
     
