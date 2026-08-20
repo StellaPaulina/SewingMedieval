@@ -37,8 +37,8 @@ circleskirt_fabric_layout <- function(pattern, fabric_width){
         x2 <- dim_x[[1]]/2 + dim_x[[1]]
         y2 <- 0
         minimum_fabric <- double_x
-        fabric_x <- 0
-        fabric_y <- double_x/2
+        fabric_x <- double_x/2
+        fabric_y <- 0
     }
     else {
         stop("Pattern is too large for fabric width")
