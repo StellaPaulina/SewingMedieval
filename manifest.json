@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "R": {
+      "versions": {
+        "shiny": "*",
+        "ggplot2": "*",
+        "sf": "*"
+      }
+    }
+  }
+}
