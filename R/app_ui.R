@@ -304,7 +304,7 @@ app_ui <- function() {
         "You can have any level of previous sewing experience and use our ",
         "visualization tool to learn about Medieval fashion. Surprisingly, ",
         "sewing medieval is simple since it consists of patterns that use ",
-        "basic geometric shapes instantly recognizable. Let’s get to it!"
+        "basic geometric shapes - instantly recognizable. Let’s get to it!"
       )
     ),
 
