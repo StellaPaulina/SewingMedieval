@@ -52,6 +52,17 @@ Additional package requirements can be found in the project files.
 
 Medieval garments were constructed in many different ways depending on period, region, material, etc. This app is therefore not intended to claim that there was one universal "medieval pattern." Instead, it provides computational tools for experimenting with selected garment constructions and adapting them to individual measurements.
 
+### Licences
+
+This project is licensed under the MIT License.
+
+### References
+
+The following references were used as sources of inspiration and information:
+
+Zerkowski, W. et al. (2017) Make your own medieval clothing: Basic garments for women. Braunschweig: Zauberfeder Verlag.
+
+Joseph, L.A. (2003) The sideless surcote, Sideless Surcote. Available at: http://www.wodefordhall.com/page30.html (Accessed: 19 August 2026). 
 
 ### Authors
 
